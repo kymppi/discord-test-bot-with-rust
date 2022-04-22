@@ -6,6 +6,8 @@ use serenity::framework::standard::{CommandResult, StandardFramework};
 use serenity::model::channel::Message;
 use serenity::prelude::*;
 
+mod environment;
+
 #[group]
 #[commands(ping)]
 struct General;
@@ -17,12 +19,14 @@ impl EventHandler for Handler {}
 
 #[tokio::main]
 async fn main() {
+    environment::check();
+
     let framework = StandardFramework::new()
         .configure(|c| c.prefix("~")) // set the bot's prefix to "~"
         .group(&GENERAL_GROUP);
 
     // Login with a bot token from the environment
-    let token = env::var("DISCORD_TOKEN").expect("token");
+    let token = env::var("DISCORD_TOKEN").expect("DISCORD_TOKEN");
     let intents = GatewayIntents::non_privileged() | GatewayIntents::MESSAGE_CONTENT;
     let mut client = Client::builder(token, intents)
         .event_handler(Handler)

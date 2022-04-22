@@ -2,3 +2,6 @@
 
 # snyk
 .dccache
+
+# env
+.env
